@@ -1,11 +1,12 @@
-mod execve;
-mod openat;
+mod common;
 
 use aya::{include_bytes_aligned, Bpf};
 use aya_log::BpfLogger;
 use clap::Parser;
 use log::{info, warn};
 use tokio::signal;
+
+use common::tp::tp_load_and_attach_prog;
 
 #[derive(Debug, Parser)]
 struct Opt {}
@@ -33,8 +34,13 @@ async fn main() -> Result<(), anyhow::Error> {
         warn!("failed to initialize eBPF logger: {}", e);
     }
 
-    openat::load_and_attatch_openat(&mut bpf)?;
-    execve::load_and_attatch_execve(&mut bpf)?;
+    // just for test
+    tp_load_and_attach_prog(&mut bpf, "enter_open_at", "syscalls", "sys_enter_openat")?;
+    tp_load_and_attach_prog(&mut bpf, "enter_execve", "syscalls", "sys_enter_execve")?;
+
+    // tp sys_write
+    tp_load_and_attach_prog(&mut bpf, "sys_enter_write", "syscalls", "sys_enter_write")?;
+    tp_load_and_attach_prog(&mut bpf, "sys_exit_write", "syscalls", "sys_exit_write")?;
 
     info!("Waiting for Ctrl-C...");
     signal::ctrl_c().await?;

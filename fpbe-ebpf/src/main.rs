@@ -19,20 +19,36 @@ format:
 
 */
 
-mod execve;
-mod openat;
+mod common;
+mod tp;
 
 #[tracepoint(name = "enter_open_at")]
-pub fn enter_open_at(ctx: TracePointContext) -> u32 {
-    match openat::handle_enter_open_at(ctx) {
+pub fn tp_enter_open_at(ctx: TracePointContext) -> u32 {
+    match tp::openat::handle_enter_open_at(ctx) {
         Ok(ret) => ret,
         Err(ret) => ret,
     }
 }
 
 #[tracepoint(name = "enter_execve")]
-pub fn enter_execve(ctx: TracePointContext) -> u32 {
-    match execve::handle_enter_execve(ctx) {
+pub fn tp_enter_execve(ctx: TracePointContext) -> u32 {
+    match tp::execve::handle_enter_execve(ctx) {
+        Ok(ret) => ret,
+        Err(ret) => ret,
+    }
+}
+
+#[tracepoint(name = "sys_enter_write")]
+pub fn tp_sys_enter_write(ctx: TracePointContext) -> u32 {
+    match tp::sys_write::handle_sys_enter_write(ctx) {
+        Ok(ret) => ret,
+        Err(ret) => ret,
+    }
+}
+
+#[tracepoint(name = "sys_exit_write")]
+pub fn tp_sys_exit_write(ctx: TracePointContext) -> u32 {
+    match tp::sys_write::handle_sys_exit_write(ctx) {
         Ok(ret) => ret,
         Err(ret) => ret,
     }

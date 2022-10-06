@@ -17,7 +17,7 @@ format:
 
 */
 
-pub(super) fn handle_enter_open_at(ctx: TracePointContext) -> Result<u32, u32> {
+pub(crate) fn handle_enter_open_at(ctx: TracePointContext) -> Result<u32, u32> {
     unsafe {
         let comm = bpf_get_current_comm().unwrap();
         let fname_ptr: usize = ctx.read_at(24).unwrap();

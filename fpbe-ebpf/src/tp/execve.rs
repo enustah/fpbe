@@ -16,7 +16,7 @@ format:
 
 */
 
-pub(super) fn handle_enter_execve(ctx: TracePointContext) -> Result<u32, u32> {
+pub(crate) fn handle_enter_execve(ctx: TracePointContext) -> Result<u32, u32> {
     unsafe {
         let comm = bpf_get_current_comm().unwrap();
 
